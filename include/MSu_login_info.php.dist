@@ -1,0 +1,9 @@
+<?php
+    /*Insert credentials for database and Marvel API and
+      rename file to MSu_login_info*/
+    $db_username='';
+    $db_password='';
+    $marvelapi_privatekey='';
+    $marvelapi_publickey='';
+
+    
