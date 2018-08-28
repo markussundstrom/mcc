@@ -1,7 +1,10 @@
 <?php
+
+require_once 'MSu_login_info.php';
+
 Class MSu_APIHandler {
-    private $_publickey = '' //FIXME Marvel public API key goes here
-    private $_privatekey = '' // FIXME Marvel private API key goes here
+    private $_publickey = ''; //FIXME Marvel public API key goes here
+    private $_privatekey = ''; // FIXME Marvel private API key goes here
     
     //Creates a key value for the api usage
     private function createKey() {

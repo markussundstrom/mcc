@@ -135,5 +135,14 @@ Class MSu_HTMLRender {
         }
         $this->_output .= '<br><br>';
     }
+
+    public function loginForm ($target) {
+        $this->_output .= '<form action="' . $target . '" method="post">' .
+                          'Username: <input type="text" name="username">' .
+                          '<br>Password: <input type="password" ' .
+                          'name="password"><input type="submit" ' .
+                          'value="submit"></form>';
+    }
+
 }
 ?>

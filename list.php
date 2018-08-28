@@ -9,11 +9,10 @@ session_start();
 $data = new MSu_DataHandler();
 $api = new MSu_APIHandler();
 
-//Check if user is logged in, if not login first user
-if (!isset($_SESSION['userfirstname']) || !isset($_SESSION['userid'])) {
-    $users = $data->getUsers();
-    $_SESSION['userfirstname'] = $users[0]['firstname'];
-    $_SESSION['userid'] = $users[0]['userid'];
+//Check if a user is logged in 
+if (!isset($_SESSION['userid'])) {
+    header('Location: login.php');
+    exit;
 }
 
 $template = new MSu_HTMLRender();

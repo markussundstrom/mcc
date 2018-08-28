@@ -1,10 +1,15 @@
 <?php
+
 Class MSu_DataHandler extends PDO {
+
+    private $salt1 = 'Tb53!r';
+    private $salt2 = 'yHaS6,';
     
     public function __construct($dbname = 'comicscollection') {
+        require 'MSu_login_info.php';
         try {
             parent::__construct("mysql:host=localhost;dbname=$dbname;".
-                                "charset=utf8", "DBUSERNAME", "DBPASSWORD");
+                                "charset=utf8", $db_username, $db_password);
         } catch (Exception $e) {
             echo "<pre>" . print_r($e) . "</pre>";
         }
@@ -12,11 +17,6 @@ Class MSu_DataHandler extends PDO {
     
     //Adds a comic to the collection, owned by the user given as an argument
     public function addComic ($comic, $userid) {
-        $query = "INSERT INTO comicdata (comicid) VALUES(:comicid)";
-        $sth = $this->prepare($query);
-        if (!$sth->execute(array(':comicid' => $comic->comicid))) {
-            print_r ($sth->errorInfo(), 1);
-        }
         $query = "INSERT INTO collection (userid, comicid) VALUES(:userid, ".
                  ":comicid)";
         $sth = $this->prepare($query);
@@ -83,16 +83,22 @@ Class MSu_DataHandler extends PDO {
             print_r($sth->errorInfo());
         }
     }
-
-    //Returns info from several DB tables
-    public function viewDB() {
-        $query = "SELECT id, comicid, firstname, lastname FROM collection " .
-                 "LEFT JOIN users on collection.userid = users.userid";
-        if ($result = $this->query($query)) {
-            $data = $result->fetchAll();
-            return $data;
+    
+    //Checks if a username and password is valid, returns userinfo if 
+    //found, otherwise NULL
+    public function checkUser ($username, $password) {
+        $token = hash('ripemd128', $this->salt1 . $password . $this->salt2);
+        $query = "SELECT * FROM users WHERE username=:un AND password=:pw";
+        $sth = $this->prepare($query);
+        if ($sth->execute(array(':un' => $username, ':pw' => $token))) {
+            $user = $sth->fetch(PDO::FETCH_ASSOC);
+            return ($user) ? $user : NULL;
         } else {
-            print_r($this->errorInfo());
+            print_r($sth->errorInfo());
+            return NULL;
         }
     }
+
+        
+
 }
