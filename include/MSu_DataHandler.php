@@ -65,7 +65,7 @@ Class MSu_DataHandler extends PDO {
     public function getUsers() {
         $query = "SELECT * FROM users";
         if ($result = $this->query($query)) {
-            $users = $result->fetchAll();
+            $users = $result->fetchAll(PDO::FETCH_ASSOC);
             return $users;
         } else {
             print_r($this->errorInfo());
@@ -96,6 +96,23 @@ Class MSu_DataHandler extends PDO {
         } else {
             print_r($sth->errorInfo());
             return NULL;
+        }
+    }
+
+    //Check if a user is admin. Returns true if admin, otherwise false
+    public function userIsAdmin ($userid) {
+        $query = "SELECT * FROM users where userid=:id";
+        $sth = $this->prepare($query);
+        if ($sth->execute(array(':id' => $userid))) {
+            $user = $sth->fetch(PDO::FETCH_ASSOC);
+            if ($user['isadmin']) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            print_r($sth->errorInfo());
+            return;
         }
     }
 

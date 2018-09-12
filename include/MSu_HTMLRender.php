@@ -136,6 +136,8 @@ Class MSu_HTMLRender {
         $this->_output .= '<br><br>';
     }
 
+    
+    //Renders a form for logging in
     public function loginForm ($target) {
         $this->_output .= '<form action="' . $target . '" method="post">' .
                           'Username: <input type="text" name="username">' .
@@ -144,5 +146,22 @@ Class MSu_HTMLRender {
                           'value="submit"></form>';
     }
 
+    public function renderUserTable($users) {
+        //$this->_output .= '<pre>' . var_dump($users) . '</pre>';
+        $this->_output .= '<table><tr>';
+        $headers = array_keys($users[0]);
+        foreach($headers as $header) {
+            $this->_output .= '<th>' . $header . '</th>';
+        }
+        $this->_output .= '</tr>';
+        foreach($users as $user) {
+            $this->_output .= '<tr>';
+            foreach ($user as $entry) {
+                $this->_output .= '<td>' . $entry . '</td>';
+            }
+            $this->_output .= '</tr>';
+        }
+        $this->_output .= '</table>';
+    }
 }
 ?>
